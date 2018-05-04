@@ -1,0 +1,88 @@
+.user_box{
+    height: 150px;
+    width: 150px;
+    text-align: center;
+    display: inline-block;
+    margin: 20px;
+}
+
+.head{
+    width: 100%;
+    background-color: rgba(196, 187, 187, 0.808);
+    border-radius: 50px;;
+    margin-top: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+h3{
+    font-weight: bold;
+    color: rgb(64, 64, 180);
+    margin: 0px;
+}
+
+.avatar{
+    max-width: 100%;
+    
+}
+
+.users{
+    padding-right: 0px;
+    height: 100%;
+    background:  url("/images/fight.gif") no-repeat;
+    background-size: cover;
+}
+
+body{
+    background: black;
+    height: 100%;
+}
+
+
+.enter_game{
+    background-color: rgb(190, 190, 190, 0.8);
+    border: 3px solid white;
+    height: 100px;
+    padding: 20px;
+    position: absolute;
+    width: 40%;
+    left: 25%;
+    margin-top: -382px;
+
+}
+
+.left{
+    display: inline-block;
+    width: 59%;
+    margin-right: 0px;
+    vertical-align: bottom;
+}
+
+.right{
+    display: inline-block;
+    width: 40%;
+    margin-right: 0px;
+    vertical-align: top;
+    height: 650px;
+}
+
+.win{
+    background: linear-gradient(rgba(116, 21, 21, 0.726), rgb(189, 49, 49),rgba(116, 21, 21, 0.726));
+    color: rgb(253, 220, 29);
+    border-radius: 50px;
+    text-align: center;
+    padding: 15px;
+    border: 3px solid rgb(126, 126, 126);
+    margin-top: 45%;
+}
+
+progress[value]{
+    width: 100%;
+    background-color: rgb(27, 83, 27);
+}
+
+#boss[value]{
+    background-color: red;
+}

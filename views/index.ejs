@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chatroom</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="./stylesheets/style.css" />
+    <audio controls>
+        <source src="BossTheme.mp3" type="audio/mpeg">
+    </audio>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var socket = io();
+            socket.on('greeting', function (data){
+                console.log(data.msg);
+                socket.emit('thankyou', {msg: 'Thank you for connecting me! -Client'});
+            });
+            $('.new_player').submit(function(e){
+                e.preventDefault();
+                var name = $('#name').val();
+                var status = $('#status').val();
+                $('.enter_game').hide();
+                socket.emit('create_new_user', {name: name, status: status});
+                return false;
+            })
+
+            socket.on('display_existing_users', function(data){
+
+                for (key in data.players) {
+                    console.log(data.players[key]);
+                    $('.left').append(`<div id='${key}' class='user_box'><div class='head'><h3>${data.players[key].name}</h3><progress id="health_${key}" value="${data.players[key].health}" max="100"></progress></div><img class="avatar" src="./images/Crusader.png" alt="Crusader"/></div>`);
+                }
+                $('.right').append(`<progress id="boss" value="${data.boss.health}" max="10000"></progress>`);
+            })
+
+            socket.on('display_new_user', function(data){
+                var userBox = `<div id='${data.userId}' class='user_box'>
+                    <div class='head'><h3>${data.players[data.userId].name}</h3><progress id="health_${data.userId}" value="${data.players[data.userId].health}" max="100"></progress></div><img class="avatar" src="./images/Crusader.png" alt="Crusader"/></div>`;
+                $(userBox).hide().appendTo('.left').fadeIn(2000);
+            });
+
+            socket.on('disconnect_user', function(data){
+                $(`#${data.userId}`).fadeOut(2000);
+            });
+
+            socket.on('update_health', function(data){
+                for(key in data.players){
+                    $(`#health_${key}`).attr('value', `${data.players[key].health}`);
+                }
+                if(data.boss.health > 0){
+                    $('#boss').attr('value', `${data.boss.health}`);      
+                }
+                else{
+                    $('.demon').fadeOut(2000);
+
+                    $('.right').delay(3000).html(`<div class="win"><h1>You've killed me you merciless curs!!</h1></div>`);
+                }
+
+            })
+
+            $(document).keydown(function(e){
+                if(e.which == 32){
+                    socket.emit('user_attack_boss', {});
+                }
+            })
+
+            $(document).on('click', '.user_box', function(){
+                var heal = this.id;
+                socket.emit('heal_user', {user_heal: heal});
+            })
+
+        });
+    </script>
+</head>
+<body>
+    <div class="users">
+        <div class="left">
+
+        </div>
+        <div class="right">
+            <img class="demon" src="./images/demon.png" alt="demon">    
+        </div>
+        
+        <div class="enter_game">
+            <form class="new_player">
+                Enter your battle name: <input type="text" id="name" />
+                <br>
+                Choose Your Status:
+                <select id="status">
+                    <option value="player">Player</option>
+                    <option value="observer">Observer</option>
+                </select>
+                <br>
+                <input type="submit" value="Enter Now!">
+            </form>            
+        </div>
+
+    </div>
+</body>
+</html>
